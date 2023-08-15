@@ -18,7 +18,7 @@ on:
 
 jobs:
   build-test:
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/build-test.yml
 
   publish-nuget:
     name: Publish NuGet package
