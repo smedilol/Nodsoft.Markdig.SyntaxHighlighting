@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Markdig.SyntaxHighlighting.Tests", "Markdig.SyntaxHighlighting.Tests\Markdig.SyntaxHighlighting.Tests.csproj", "{B0696B7B-33C0-49B3-B8B2-DE07A7FCFBE9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Markdig.SyntaxHighlighting.Core", "Markdig.SyntaxHighlighting.Core\Markdig.SyntaxHighlighting.Core.csproj", "{3D6F2840-48DE-4C4E-9129-4AF443984056}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Markdig.SyntaxHighlighting", "Markdig.SyntaxHighlighting\Markdig.SyntaxHighlighting.csproj", "{5D1E4E89-83A2-4B14-BB11-DEB3C69665F0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Markdig.SyntaxHighlighting.Core.Tests", "Markdig.SyntaxHighlighting.Core.Tests\Markdig.SyntaxHighlighting.Core.Tests.csproj", "{51BF30DD-825E-4538-A697-83760A8C26B9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +13,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B0696B7B-33C0-49B3-B8B2-DE07A7FCFBE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B0696B7B-33C0-49B3-B8B2-DE07A7FCFBE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B0696B7B-33C0-49B3-B8B2-DE07A7FCFBE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B0696B7B-33C0-49B3-B8B2-DE07A7FCFBE9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5D1E4E89-83A2-4B14-BB11-DEB3C69665F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5D1E4E89-83A2-4B14-BB11-DEB3C69665F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5D1E4E89-83A2-4B14-BB11-DEB3C69665F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5D1E4E89-83A2-4B14-BB11-DEB3C69665F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D6F2840-48DE-4C4E-9129-4AF443984056}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D6F2840-48DE-4C4E-9129-4AF443984056}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D6F2840-48DE-4C4E-9129-4AF443984056}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D6F2840-48DE-4C4E-9129-4AF443984056}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51BF30DD-825E-4538-A697-83760A8C26B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51BF30DD-825E-4538-A697-83760A8C26B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51BF30DD-825E-4538-A697-83760A8C26B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51BF30DD-825E-4538-A697-83760A8C26B9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
