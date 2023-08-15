@@ -28,7 +28,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Markdig.SyntaxHighlighting.Core\Markdig.SyntaxHighlighting.Core.csproj" />
+      <ProjectReference Include="..\Nodsoft.Markdig.SyntaxHighlighting\Nodsoft.Markdig.SyntaxHighlighting.csproj" />
     </ItemGroup>
 
     <ItemGroup>

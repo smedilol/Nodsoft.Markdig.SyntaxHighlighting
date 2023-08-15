@@ -7,7 +7,7 @@ using Markdig.Renderers;
 using Markdig.Renderers.Html;
 using Markdig.Syntax;
 
-namespace Markdig.SyntaxHighlighting.Core;
+namespace Nodsoft.Markdig.SyntaxHighlighting;
 
 public class SyntaxHighlightingCodeBlockRenderer : HtmlObjectRenderer<CodeBlock>
 {

@@ -1,7 +1,8 @@
-﻿using Markdig.Renderers;
+﻿using Markdig;
+using Markdig.Renderers;
 using Markdig.Renderers.Html;
 
-namespace Markdig.SyntaxHighlighting.Core.Tests;
+namespace Nodsoft.Markdig.SyntaxHighlighting.Tests;
 
 public class SyntaxHighlightingExtensionsTests
 {

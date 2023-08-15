@@ -1,6 +1,6 @@
 ﻿using ColorCode;
 
-namespace Markdig.SyntaxHighlighting.Core.Tests;
+namespace Nodsoft.Markdig.SyntaxHighlighting.Tests;
 
 public class LanguageTypeAdapterTests {
     private const string AspxCsFirstLine = "<%@ Page Language=\"C#\" %>";

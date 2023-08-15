@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Markdig.SyntaxHighlighting.Core.Tests.Example;
+namespace Nodsoft.Markdig.SyntaxHighlighting.Tests.Example;
 
 public class CodeSample
 {

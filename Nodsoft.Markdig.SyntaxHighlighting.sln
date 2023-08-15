@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Markdig.SyntaxHighlighting.Core", "Markdig.SyntaxHighlighting.Core\Markdig.SyntaxHighlighting.Core.csproj", "{3D6F2840-48DE-4C4E-9129-4AF443984056}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nodsoft.Markdig.SyntaxHighlighting", "Nodsoft.Markdig.SyntaxHighlighting\Nodsoft.Markdig.SyntaxHighlighting.csproj", "{3D6F2840-48DE-4C4E-9129-4AF443984056}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Markdig.SyntaxHighlighting.Core.Tests", "Markdig.SyntaxHighlighting.Core.Tests\Markdig.SyntaxHighlighting.Core.Tests.csproj", "{51BF30DD-825E-4538-A697-83760A8C26B9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nodsoft.Markdig.SyntaxHighlighting.Tests", "Nodsoft.Markdig.SyntaxHighlighting.Tests\Nodsoft.Markdig.SyntaxHighlighting.Tests.csproj", "{51BF30DD-825E-4538-A697-83760A8C26B9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1D193207-ADF4-4581-9A72-9329A43769BC}"
 	ProjectSection(SolutionItems) = preProject

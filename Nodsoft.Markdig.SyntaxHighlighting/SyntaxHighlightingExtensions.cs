@@ -1,6 +1,7 @@
 ﻿using ColorCode.Styling;
+using Markdig;
 
-namespace Markdig.SyntaxHighlighting.Core;
+namespace Nodsoft.Markdig.SyntaxHighlighting;
 
 public static class SyntaxHighlightingExtensions 
 {

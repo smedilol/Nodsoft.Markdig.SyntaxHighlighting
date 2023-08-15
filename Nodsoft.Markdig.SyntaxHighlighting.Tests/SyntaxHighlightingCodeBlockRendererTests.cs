@@ -6,7 +6,7 @@ using Markdig.Renderers.Html;
 using Markdig.Syntax;
 using NSubstitute;
 
-namespace Markdig.SyntaxHighlighting.Core.Tests;
+namespace Nodsoft.Markdig.SyntaxHighlighting.Tests;
 
 public class SyntaxHighlightingCodeBlockRendererTests
 {

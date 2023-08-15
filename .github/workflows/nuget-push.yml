@@ -32,7 +32,7 @@ jobs:
       matrix:
         # Projects to publish
         project: [
-          { name: "Main", path: "Markdig.SyntaxHighlighting.Core/Markdig.SyntaxHighlighting.Core.csproj" },
+          { name: "Main", path: "Nodsoft.Markdig.SyntaxHighlighting/Nodsoft.Markdig.SyntaxHighlighting.csproj" },
         ]
         
         # Sources to publish to

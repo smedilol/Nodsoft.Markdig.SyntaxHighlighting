@@ -1,7 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using ColorCode;
 
-namespace Markdig.SyntaxHighlighting.Core;
+namespace Nodsoft.Markdig.SyntaxHighlighting;
 
 public class LanguageTypeAdapter
 {

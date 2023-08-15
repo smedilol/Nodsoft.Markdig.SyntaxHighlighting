@@ -1,8 +1,9 @@
 ﻿using ColorCode.Styling;
+using Markdig;
 using Markdig.Renderers;
 using Markdig.Renderers.Html;
 
-namespace Markdig.SyntaxHighlighting.Core;
+namespace Nodsoft.Markdig.SyntaxHighlighting;
 
 public class SyntaxHighlightingExtension : IMarkdownExtension
 {

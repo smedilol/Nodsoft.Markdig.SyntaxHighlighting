@@ -1,4 +1,6 @@
-﻿namespace Markdig.SyntaxHighlighting.Core.Tests;
+﻿using Markdig;
+
+namespace Nodsoft.Markdig.SyntaxHighlighting.Tests;
 
 public class IntegrationTests
 {
