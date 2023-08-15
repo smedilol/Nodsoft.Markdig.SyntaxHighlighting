@@ -6,4 +6,12 @@
       <Version>3.6.133</Version>
     </PackageReference>
   </ItemGroup>
+
+  <ItemGroup Label="PackageInfoFiles">
+    <!-- Import the Readme at build props level if there is none in the project -->
+
+    <None Condition="!Exists('README.md')" Include="$(_DirectoryBuildPropsBasePath)\README.md" Pack="true" PackagePath="/" />
+    <None Include="$(MSBuildThisFileDirectory)\LICENSE" Pack="true" PackagePath="/" />
+    <None Include="$(MSBuildThisFileDirectory)\icon.png" Pack="true" PackagePath="/" />
+  </ItemGroup>
 </Project>

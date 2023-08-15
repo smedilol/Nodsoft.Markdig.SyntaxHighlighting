@@ -17,6 +17,10 @@
         <PackageLicenseUrl>https://raw.githubusercontent.com/Nodsoft/Markdig.SyntaxHighlighting.Core/master/LICENSE</PackageLicenseUrl>
         <RepositoryUrl>https://github.com/Nodsoft/Markdig.SyntaxHighlighting.Core</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
+        
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <PackageIcon>icon.png</PackageIcon>
     </PropertyGroup>
 
     <ItemGroup>
