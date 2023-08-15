@@ -14,7 +14,6 @@
         
         <PackageTags>markdig,extension,syntax,highlighting</PackageTags>
         <PackageProjectUrl>https://github.com/Nodsoft/Markdig.SyntaxHighlighting.Core</PackageProjectUrl>
-        <PackageLicenseUrl>https://raw.githubusercontent.com/Nodsoft/Markdig.SyntaxHighlighting.Core/master/LICENSE</PackageLicenseUrl>
         <RepositoryUrl>https://github.com/Nodsoft/Markdig.SyntaxHighlighting.Core</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         
