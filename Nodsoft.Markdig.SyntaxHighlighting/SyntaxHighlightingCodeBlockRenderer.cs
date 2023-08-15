@@ -22,10 +22,7 @@ public class SyntaxHighlightingCodeBlockRenderer : HtmlObjectRenderer<CodeBlock>
 
 	protected override void Write(HtmlRenderer renderer, CodeBlock obj)
 	{
-		FencedCodeBlock? fencedCodeBlock = obj as FencedCodeBlock;
-		FencedCodeBlockParser? parser = obj.Parser as FencedCodeBlockParser;
-
-		if (fencedCodeBlock == null || parser == null)
+		if (obj is not FencedCodeBlock { Parser: FencedCodeBlockParser { InfoPrefix: { } infoPrefix } } fencedCodeBlock)
 		{
 			_underlyingRenderer.Write(renderer, obj);
 			return;
@@ -33,7 +30,7 @@ public class SyntaxHighlightingCodeBlockRenderer : HtmlObjectRenderer<CodeBlock>
 
 		HtmlAttributes attributes = obj.TryGetAttributes() ?? new HtmlAttributes();
 
-		string languageMoniker = fencedCodeBlock.Info.Replace(parser.InfoPrefix, string.Empty);
+		string? languageMoniker = fencedCodeBlock.Info?.Replace(infoPrefix, string.Empty);
 
 		if (string.IsNullOrEmpty(languageMoniker))
 		{
@@ -42,19 +39,17 @@ public class SyntaxHighlightingCodeBlockRenderer : HtmlObjectRenderer<CodeBlock>
 		}
 
 		attributes.AddClass($"lang-{languageMoniker}");
-		attributes.Classes.Remove($"language-{languageMoniker}");
-
+		attributes.Classes?.Remove($"language-{languageMoniker}");
 		attributes.AddClass("editor-colors");
 
-		string firstLine;
-		string code = GetCode(obj, out firstLine);
+		string code = GetCode(obj, out string? firstLine);
 
 		renderer
 			.Write("<div")
 			.WriteAttributes(attributes)
 			.Write(">");
 
-		string markup = ApplySyntaxHighlighting(languageMoniker, firstLine, code);
+		string markup = ApplySyntaxHighlighting(languageMoniker, firstLine ?? "", code);
 
 		renderer.WriteLine(markup);
 		renderer.WriteLine("</div>");
@@ -63,12 +58,11 @@ public class SyntaxHighlightingCodeBlockRenderer : HtmlObjectRenderer<CodeBlock>
 	private string ApplySyntaxHighlighting(string languageMoniker, string firstLine, string code)
 	{
 		LanguageTypeAdapter languageTypeAdapter = new();
-		ILanguage? language = languageTypeAdapter.Parse(languageMoniker, firstLine);
 
-		if (language == null)
+		if (languageTypeAdapter.Parse(languageMoniker, firstLine) is not { } language)
 		{
-			//handle unrecognised language formats, e.g. when using mermaid diagrams
-			return code;
+			// handle unrecognised language formats, e.g. when using mermaid diagrams
+            return /*lang=html*/$@"<div class=""{languageMoniker}""><pre>{code}</pre></div>";
 		}
         
 		StyleDictionary? styleSheet = _customCss ?? StyleDictionary.DefaultDark;
@@ -77,7 +71,7 @@ public class SyntaxHighlightingCodeBlockRenderer : HtmlObjectRenderer<CodeBlock>
 		return colourizedCode;
 	}
 
-	private static string GetCode(LeafBlock obj, out string firstLine)
+	private static string GetCode(LeafBlock obj, out string? firstLine)
 	{
 		StringBuilder code = new();
 		firstLine = null;
@@ -86,17 +80,18 @@ public class SyntaxHighlightingCodeBlockRenderer : HtmlObjectRenderer<CodeBlock>
 		{
 			StringSlice slice = line.Slice;
 
-			if (slice.Text == null)
+			if (slice.Text is null)
 			{
 				continue;
 			}
 
 			string lineText = slice.Text.Substring(slice.Start, slice.Length);
 
-			if (firstLine == null)
+			if (firstLine is null)
 			{
 				firstLine = lineText;
-			} else
+			} 
+			else
 			{
 				code.AppendLine();
 			}
