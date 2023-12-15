@@ -1,6 +1,6 @@
-﻿using System.Text;
+﻿using System.IO;
+using System.Text;
 using ColorCode;
-using ColorCode.Styling;
 using Markdig.Helpers;
 using Markdig.Parsers;
 using Markdig.Renderers;
@@ -11,94 +11,96 @@ namespace Nodsoft.Markdig.SyntaxHighlighting;
 
 public class SyntaxHighlightingCodeBlockRenderer : HtmlObjectRenderer<CodeBlock>
 {
-	private readonly CodeBlockRenderer _underlyingRenderer;
-	private readonly StyleDictionary? _customCss;
+    private readonly CodeBlockRenderer _underlyingRenderer;
+    private readonly IStyleSheet _customCss;
 
-	public SyntaxHighlightingCodeBlockRenderer(CodeBlockRenderer? underlyingRenderer = null, StyleDictionary? customCss = null)
-	{
-		_underlyingRenderer = underlyingRenderer ?? new CodeBlockRenderer();
-		_customCss = customCss;
-	}
+    public SyntaxHighlightingCodeBlockRenderer(CodeBlockRenderer underlyingRenderer = null, IStyleSheet customCss = null)
+    {
+        _underlyingRenderer = underlyingRenderer ?? new CodeBlockRenderer();
+        _customCss = customCss;
+    }
 
-	protected override void Write(HtmlRenderer renderer, CodeBlock obj)
-	{
-		if (obj is not FencedCodeBlock { Parser: FencedCodeBlockParser { InfoPrefix: { } infoPrefix } } fencedCodeBlock)
-		{
-			_underlyingRenderer.Write(renderer, obj);
-			return;
-		}
+    protected override void Write(HtmlRenderer renderer, CodeBlock obj)
+    {
+        var fencedCodeBlock = obj as FencedCodeBlock;
+        var parser = obj.Parser as FencedCodeBlockParser;
+        if (fencedCodeBlock == null || parser == null)
+        {
+            _underlyingRenderer.Write(renderer, obj);
+            return;
+        }
 
-		HtmlAttributes attributes = obj.TryGetAttributes() ?? new HtmlAttributes();
+        var attributes = obj.TryGetAttributes() ?? new HtmlAttributes();
 
-		string? languageMoniker = fencedCodeBlock.Info?.Replace(infoPrefix, string.Empty);
+        var languageMoniker = fencedCodeBlock.Info.Replace(parser.InfoPrefix, string.Empty);
+        if (string.IsNullOrEmpty(languageMoniker))
+        {
+            _underlyingRenderer.Write(renderer, obj);
+            return;
+        }
 
-		if (string.IsNullOrEmpty(languageMoniker))
-		{
-			_underlyingRenderer.Write(renderer, obj);
-			return;
-		}
+        attributes.AddClass($"lang-{languageMoniker}");
+        attributes.Classes.Remove($"language-{languageMoniker}");
 
-		attributes.AddClass($"lang-{languageMoniker}");
-		attributes.Classes?.Remove($"language-{languageMoniker}");
-		attributes.AddClass("editor-colors");
+        attributes.AddClass("editor-colors");
 
-		string code = GetCode(obj, out string? firstLine);
+        string firstLine;
+        var code = GetCode(obj, out firstLine);
 
-		renderer
-			.Write("<div")
-			.WriteAttributes(attributes)
-			.Write(">");
+        renderer
+            .Write("<div")
+            .WriteAttributes(attributes)
+            .Write(">");
 
-		string markup = ApplySyntaxHighlighting(languageMoniker, firstLine ?? "", code);
+        var markup = ApplySyntaxHighlighting(languageMoniker, firstLine, code);
 
-		renderer.WriteLine(markup);
-		renderer.WriteLine("</div>");
-	}
+        renderer.WriteLine(markup);
+        renderer.WriteLine("</div>");
+    }
 
-	private string ApplySyntaxHighlighting(string languageMoniker, string firstLine, string code)
-	{
-		LanguageTypeAdapter languageTypeAdapter = new();
+    private string ApplySyntaxHighlighting(string languageMoniker, string firstLine, string code)
+    {
+        var languageTypeAdapter = new LanguageTypeAdapter();
+        var language = languageTypeAdapter.Parse(languageMoniker, firstLine);
 
-		if (languageTypeAdapter.Parse(languageMoniker, firstLine) is not { } language)
-		{
-			// handle unrecognised language formats, e.g. when using mermaid diagrams
-            return /*lang=html*/$@"<div class=""{languageMoniker}""><pre>{code}</pre></div>";
-		}
-        
-		StyleDictionary? styleSheet = _customCss ?? StyleDictionary.DefaultDark;
-		HtmlClassFormatter formatter = new(styleSheet);
-		string colourizedCode = formatter.GetHtmlString(code, language);
-		return colourizedCode;
-	}
+        if (language == null)
+        { //handle unrecognised language formats, e.g. when using mermaid diagrams
+            return code;
+        }
 
-	private static string GetCode(LeafBlock obj, out string? firstLine)
-	{
-		StringBuilder code = new();
-		firstLine = null;
+        var codeBuilder = new StringBuilder();
+        var codeWriter = new StringWriter(codeBuilder);
+        var styleSheet = _customCss ?? StyleSheets.Default;
+        var colourizer = new CodeColorizer();
+        colourizer.Colorize(code, language, Formatters.Default, styleSheet, codeWriter);
+        return codeBuilder.ToString();
+    }
 
-		foreach (StringLine line in obj.Lines.Lines)
-		{
-			StringSlice slice = line.Slice;
+    private static string GetCode(LeafBlock obj, out string firstLine)
+    {
+        var code = new StringBuilder();
+        firstLine = null;
+        foreach (var line in obj.Lines.Lines)
+        {
+            var slice = line.Slice;
+            if (slice.Text == null)
+            {
+                continue;
+            }
 
-			if (slice.Text is null)
-			{
-				continue;
-			}
+            var lineText = slice.Text.Substring(slice.Start, slice.Length);
 
-			string lineText = slice.Text.Substring(slice.Start, slice.Length);
+            if (firstLine == null)
+            {
+                firstLine = lineText;
+            }
+            else
+            {
+                code.AppendLine();
+            }
 
-			if (firstLine is null)
-			{
-				firstLine = lineText;
-			} 
-			else
-			{
-				code.AppendLine();
-			}
-
-			code.Append(lineText);
-		}
-
-		return code.ToString();
-	}
+            code.Append(lineText);
+        }
+        return code.ToString();
+    }
 }

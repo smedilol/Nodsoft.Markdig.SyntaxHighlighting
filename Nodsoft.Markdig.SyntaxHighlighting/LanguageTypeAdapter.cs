@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using ColorCode;
 
 namespace Nodsoft.Markdig.SyntaxHighlighting;

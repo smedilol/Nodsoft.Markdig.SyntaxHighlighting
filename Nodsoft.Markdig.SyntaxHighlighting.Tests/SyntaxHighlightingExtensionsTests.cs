@@ -1,85 +1,92 @@
-﻿using Markdig;
+﻿using System;
+using System.IO;
+using Markdig;
 using Markdig.Renderers;
 using Markdig.Renderers.Html;
+using Xunit;
 
-namespace Nodsoft.Markdig.SyntaxHighlighting.Tests;
-
-public class SyntaxHighlightingExtensionsTests
+namespace Nodsoft.Markdig.SyntaxHighlighting.Tests
 {
-	private class FakeRenderer : TextRendererBase<FakeRenderer>
-	{
-		public FakeRenderer(TextWriter writer) : base(writer) { }
-	}
 
-	[Fact]
-	public void CodeBlockRendererReplaced()
-	{
-		SyntaxHighlightingExtension extension = new();
-		StringWriter writer = new();
-		HtmlRenderer markdownRenderer = new(writer);
+    public class SyntaxHighlightingExtensionsTests
+    {
+        private class FakeRenderer : TextRendererBase<FakeRenderer>
+        {
+            public FakeRenderer(TextWriter writer) : base(writer)
+            {
+            }
+        }
 
-		int oldRendererCount = markdownRenderer.ObjectRenderers.Count;
+        [Fact]
+        public void CodeBlockRendererReplaced()
+        {
+            var extension = new SyntaxHighlightingExtension();
+            var writer = new StringWriter();
+            var markdownRenderer = new HtmlRenderer(writer);
 
-		Assert.Single(markdownRenderer.ObjectRenderers.FindAll(x => x.GetType() == typeof(CodeBlockRenderer)));
+            int oldRendererCount = markdownRenderer.ObjectRenderers.Count;
 
-		extension.Setup(null, markdownRenderer);
+            Assert.Single(markdownRenderer.ObjectRenderers.FindAll(x => x.GetType() == typeof(CodeBlockRenderer)));
 
-		Assert.Empty(markdownRenderer.ObjectRenderers.FindAll(x => x.GetType() == typeof(CodeBlockRenderer)));
-		Assert.Single(markdownRenderer.ObjectRenderers.FindAll(x => x.GetType() == typeof(SyntaxHighlightingCodeBlockRenderer))
-);
+            extension.Setup(null, markdownRenderer);
 
-		Assert.Equal(oldRendererCount, markdownRenderer.ObjectRenderers.Count);
-	}
+            Assert.Empty(markdownRenderer.ObjectRenderers.FindAll(x => x.GetType() == typeof(CodeBlockRenderer)));
+            Assert.Single(markdownRenderer.ObjectRenderers.FindAll(x => x.GetType() == typeof(SyntaxHighlightingCodeBlockRenderer))
+            );
 
-	[Fact]
-	public void DoesntThrowWhenSetupPipeline()
-	{
-		SyntaxHighlightingExtension extension = new();
-		extension.Setup(new());
-	}
+            Assert.Equal(oldRendererCount, markdownRenderer.ObjectRenderers.Count);
+        }
 
-	[Fact]
-	public void PipelineChangedIfHtmlRenderer()
-	{
-		SyntaxHighlightingExtension extension = new();
-		StringWriter writer = new();
-		HtmlRenderer markdownRenderer = new(writer);
-		markdownRenderer.ObjectRenderers.RemoveAll(x => true);
-		extension.Setup(null, markdownRenderer);
-		Assert.Single(markdownRenderer.ObjectRenderers);
-	}
+        [Fact]
+        public void DoesntThrowWhenSetupPipeline()
+        {
+            var extension = new SyntaxHighlightingExtension();
+            extension.Setup(new MarkdownPipelineBuilder());
+        }
 
-	[Fact]
-	public void PipelineChangedIfHtmlRendererUsingExtensionMethod()
-	{
-		MarkdownPipelineBuilder pipelineBuilder = new();
-		pipelineBuilder.UseSyntaxHighlighting();
-		MarkdownPipeline pipeline = pipelineBuilder.Build();
-		StringWriter writer = new();
-		HtmlRenderer markdownRenderer = new(writer);
-		pipeline.Setup(markdownRenderer);
-		SyntaxHighlightingCodeBlockRenderer? renderer = markdownRenderer.ObjectRenderers.FindExact<SyntaxHighlightingCodeBlockRenderer>();
-		Assert.NotNull(renderer);
-	}
+        [Fact]
+        public void PipelineChangedIfHtmlRenderer()
+        {
+            var extension = new SyntaxHighlightingExtension();
+            var writer = new StringWriter();
+            var markdownRenderer = new HtmlRenderer(writer);
+            markdownRenderer.ObjectRenderers.RemoveAll(x => true);
+            extension.Setup(null, markdownRenderer);
+            Assert.Single(markdownRenderer.ObjectRenderers);
+        }
 
-	[Fact]
-	public void PipelineIntactIfNotHtmlRenderer()
-	{
-		SyntaxHighlightingExtension extension = new();
-		StringWriter writer = new();
-		FakeRenderer markdownRenderer = new(writer);
-		int oldRendererCount = markdownRenderer.ObjectRenderers.Count;
-		extension.Setup(null, markdownRenderer);
-		Assert.Equal(oldRendererCount, markdownRenderer.ObjectRenderers.Count);
-	}
+        [Fact]
+        public void PipelineChangedIfHtmlRendererUsingExtensionMethod()
+        {
+            var pipelineBuilder = new MarkdownPipelineBuilder();
+            pipelineBuilder.UseSyntaxHighlighting();
+            MarkdownPipeline pipeline = pipelineBuilder.Build();
+            var writer = new StringWriter();
+            var markdownRenderer = new HtmlRenderer(writer);
+            pipeline.Setup(markdownRenderer);
+            SyntaxHighlightingCodeBlockRenderer renderer = markdownRenderer.ObjectRenderers.FindExact<SyntaxHighlightingCodeBlockRenderer>();
+            Assert.NotNull(renderer);
+        }
 
-	[Fact]
-	public void ThrowsIfRendererIsNull()
-	{
-		SyntaxHighlightingExtension extension = new();
-		Assert.Throws<ArgumentNullException>((Action)_ExtensionSetup);
-		return;
+        [Fact]
+        public void PipelineIntactIfNotHtmlRenderer()
+        {
+            var extension = new SyntaxHighlightingExtension();
+            var writer = new StringWriter();
+            var markdownRenderer = new FakeRenderer(writer);
+            int oldRendererCount = markdownRenderer.ObjectRenderers.Count;
+            extension.Setup(null, markdownRenderer);
+            Assert.Equal(oldRendererCount, markdownRenderer.ObjectRenderers.Count);
+        }
 
-		void _ExtensionSetup() => extension.Setup(null!, null!);
-	}
+        [Fact]
+        public void ThrowsIfRendererIsNull()
+        {
+            var extension = new SyntaxHighlightingExtension();
+            Assert.Throws<ArgumentNullException>((Action)_ExtensionSetup);
+            return;
+
+            void _ExtensionSetup() => extension.Setup(null, null);
+        }
+    }
 }

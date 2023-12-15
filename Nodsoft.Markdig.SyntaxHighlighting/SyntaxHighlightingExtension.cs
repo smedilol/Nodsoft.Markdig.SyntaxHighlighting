@@ -1,37 +1,41 @@
-﻿using ColorCode.Styling;
+﻿using System;
+using ColorCode;
 using Markdig;
 using Markdig.Renderers;
 using Markdig.Renderers.Html;
 
 namespace Nodsoft.Markdig.SyntaxHighlighting;
-
 public class SyntaxHighlightingExtension : IMarkdownExtension
 {
-	private readonly StyleDictionary? _customCss;
+    private readonly IStyleSheet _customCss;
 
-	public SyntaxHighlightingExtension(StyleDictionary? customCss = null)
-	{
-		_customCss = customCss;
-	}
+    public SyntaxHighlightingExtension(IStyleSheet customCss = null)
+    {
+        _customCss = customCss;
+    }
 
-	public void Setup(MarkdownPipelineBuilder pipeline) { }
+    public void Setup(MarkdownPipelineBuilder pipeline) { }
 
-	public void Setup(MarkdownPipeline pipeline, IMarkdownRenderer? renderer)
-	{
-		ArgumentNullException.ThrowIfNull(renderer);
+    public void Setup(MarkdownPipeline pipeline, IMarkdownRenderer renderer)
+    {
+        if (renderer == null)
+        {
+            throw new ArgumentNullException(nameof(renderer));
+        }
 
-		if (renderer is not TextRendererBase<HtmlRenderer> htmlRenderer)
-		{
-			return;
-		}
+        var htmlRenderer = renderer as TextRendererBase<HtmlRenderer>;
+        if (htmlRenderer == null)
+        {
+            return;
+        }
 
-		CodeBlockRenderer? originalCodeBlockRenderer = htmlRenderer.ObjectRenderers.FindExact<CodeBlockRenderer>();
+        var originalCodeBlockRenderer = htmlRenderer.ObjectRenderers.FindExact<CodeBlockRenderer>();
+        if (originalCodeBlockRenderer != null)
+        {
+            htmlRenderer.ObjectRenderers.Remove(originalCodeBlockRenderer);
+        }
 
-		if (originalCodeBlockRenderer is not null)
-		{
-			htmlRenderer.ObjectRenderers.Remove(originalCodeBlockRenderer);
-		}
-
-		htmlRenderer.ObjectRenderers.AddIfNotAlready(new SyntaxHighlightingCodeBlockRenderer(originalCodeBlockRenderer, _customCss));
-	}
+        htmlRenderer.ObjectRenderers.AddIfNotAlready(
+            new SyntaxHighlightingCodeBlockRenderer(originalCodeBlockRenderer, _customCss));
+    }
 }

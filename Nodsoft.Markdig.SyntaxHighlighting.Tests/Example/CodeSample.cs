@@ -1,9 +1,10 @@
 ﻿using System.Reflection;
 
-namespace Nodsoft.Markdig.SyntaxHighlighting.Tests.Example;
-
-public class CodeSample
+namespace Nodsoft.Markdig.SyntaxHighlighting.Tests.Example
 {
+
+    public class CodeSample
+    {
 //	[Fact]
 //	public void CodeSampleWorks()
 //	{
@@ -37,4 +38,5 @@ public class CodeSample
 //		File.WriteAllText(Path.Combine(folder, "actual.html"), actualHtml);
 //		Assert.Equal(expectedHtml, actualHtml);
 //	}
+    }
 }
